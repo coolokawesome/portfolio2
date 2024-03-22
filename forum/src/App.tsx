@@ -26,9 +26,9 @@ function App() {
     <div>
       <BrowserRouter>
       <Routes>
-        <Route path="/" element={<Home />} />
+        <Route path="/" element={<Home sessionId={sessionId!} />} />
         <Route path="/post/:id" element={<Post />}/>
-        <Route path="*" element={<Home />} />
+        <Route path="*" element={<Home sessionId={sessionId!} />} />
         <Route path="/suggestions" element={null} />
       </Routes>
       </BrowserRouter>

@@ -11,6 +11,9 @@ body {
 .home-content-container {
     position: relative;
 }
+.error-text {
+    color: red
+}
 .make-post-container {
     position: absolute;
     bottom: 10px;
