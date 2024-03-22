@@ -1,0 +1,38 @@
+body {
+    margin: 0;
+}
+.header-container {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    background-color: rgb(215, 241, 250);
+}
+.home-content-container {
+    position: relative;
+}
+.make-post-container {
+    position: absolute;
+    bottom: 10px;
+    right: 10px;
+    height: 300px;
+    width: 300px;
+    background-color: rgb(202, 234, 243);
+    form {
+        .post-row {
+            display: flex;
+            justify-content: space-between;
+        }
+        input, textarea {
+            width: 70%
+        }
+    }
+}
+.forum-header-right {
+    a {
+        cursor: pointer;
+        text-decoration: none;
+        color: black;
+        margin: 0px 3px
+    }
+}
