@@ -15,9 +15,6 @@ body {
     color: red
 }
 .make-post-container {
-    position: absolute;
-    bottom: 10px;
-    right: 10px;
     height: 300px;
     width: 300px;
     background-color: rgb(202, 234, 243);

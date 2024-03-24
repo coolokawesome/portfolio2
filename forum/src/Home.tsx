@@ -1,32 +1,67 @@
-import { useState } from 'react'
+import { useCallback, useEffect, useState } from 'react'
 import Header from './Header'
 import { useNavigate } from 'react-router-dom'
 import {v4 as uuidv4} from 'uuid'
 
 
-interface Post {
+export interface Post {
   title?: string,
   comment?: string,
   date?: number,
-  id?: string, 
+  forumPostID?: string, 
   sessionId?: string,
-  subject?: string
+  lastUpdated?: number,
+  image?: File
 }
 
+
 function Home({sessionId}:{sessionId: string}) {
-    const pages = [1,2,3,4,5]
     const [makePost, setMakePost] = useState(false)
     const [postContent, setPostContent] = useState<Post>({
       title: "",
       comment: "",
       date: undefined,
-      id: undefined,
+      forumPostID: undefined,
       sessionId: undefined,
-      subject: undefined
+      lastUpdated: undefined,
+      image: undefined
     })
     const [error, setError] = useState<string | undefined>(undefined)
-
+    const [allPosts, setAllPosts] = useState<Post[] | undefined>(undefined)
     const navigate = useNavigate()
+
+    useEffect(() => {
+      fetch("http://localhost:3001/", {
+        method: 'GET',
+        headers: {
+          'Content-Type': 'application/json',
+        }})
+        .then((res => res.json()))
+        .then((res) => {
+          console.log('res', res)
+          setAllPosts(res)
+        })
+    }, [])
+
+    const setPost = () => {
+      fetch("http://localhost:3001/", {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          ...postContent,
+          date: Math.floor(new Date().getTime() / 1000).toString(),
+          lastUpdated: Math.floor(new Date().getTime() / 1000).toString(),
+          forumPostID: uuidv4(),
+          sessionId: sessionId
+
+        })
+      })
+      .then((res => console.log(res)))
+    }
+
+
   return (
     <div>
         <Header />
@@ -35,15 +70,13 @@ function Home({sessionId}:{sessionId: string}) {
         <p>recent posts:</p>
         <div className='home-content-container'>
             <ul>
-            {pages.map((page) => (
+            {allPosts && allPosts.map((post) => (
               <li>
-                <a onClick={() => navigate(`/post/${page}`)}>{page}</a>
+                <a onClick={() => navigate(`/post/${post.forumPostID}`)}>{post.title}</a>
               </li>
             ))}
             </ul>
         </div>
-        {
-            makePost && (
               <div className='make-post-container'>
                 <h5>Make Post</h5>
                 <form onSubmit={(e) => {
@@ -51,20 +84,8 @@ function Home({sessionId}:{sessionId: string}) {
                     if (!postContent.title || postContent.title === "") {
                       return setError('Please enter a title.')
                     }
-                    fetch("http://localhost:3001/", {
-                      method: 'POST',
-                      headers: {
-                        'Content-Type': 'application/json',
-                      },
-                      body: JSON.stringify({
-                        ...postContent,
-                        date: Math.floor(new Date().getTime() / 1000),
-                        id: uuidv4(),
-                        sessionId: sessionId
-
-                      })
-                    })
-                    .then((res => console.log(res)))
+                    setPost();
+                    window.location.reload()
                   }}>
                   { error && <p className='error-text'>{error}</p>}
                   <div className='post-row'><label htmlFor='title'>Title</label>
@@ -88,23 +109,12 @@ function Home({sessionId}:{sessionId: string}) {
                     }
                      id='comment'></textarea></div>
                      <div>
-                      <label htmlFor='selection'>Subject</label>
-                      <select onChange={(e) =>
-                      setPostContent(() => ({
-                        ...postContent,
-                        subject: e.target.value
-                      }))
-                    }>
-                        <option value='misc'>Misc</option>
-                        <option value='school'>School</option>
-
-                      </select>
+                      <label htmlFor='selection'>Image</label>
+                      <input accept=".png" type='file' />
                      </div>
                   <button>submit</button>
                 </form>
               </div>
-            )
-          }
     </div>
   )
 }
