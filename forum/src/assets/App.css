@@ -1,18 +1,18 @@
 body {
     margin: 0;
-    font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
 }
 .header-container {
     display: flex;
     flex-direction: row;
     justify-content: space-between;
     align-items: center;
-    background: linear-gradient(0deg, #333, rgb(31, 13, 54));
+    background: linear-gradient(0deg, #131015, rgb(31, 13, 54));
     border-bottom: 2px solid rgb(21, 3, 37);
     height: 50px;
     position: sticky !important;
     top: 0;
     padding: 10px;
+    z-index: 10000;
     h2 {
         color: white 
     }
@@ -63,6 +63,45 @@ body {
 .error-text {
     color: red
 }
+button {
+    border: 1px solid rgba(0, 0, 0, 0.469);
+    border-radius: 3px;
+    background-color: #00000000;
+    align-self: center;
+    width: 100%;
+    transition-duration: 0.2s;
+    margin-bottom: 3px;
+    &:hover {
+        background-color: rgb(32, 15, 40);
+        color: white;
+        transition-duration: 0.2s;
+    }
+}
+.make-comment-container {
+    position: fixed;
+    display: flex;
+    flex-direction: column;
+    justify-content: end;
+    width: 100%;
+    bottom: 0;
+    background-color: rgb(232, 226, 237);
+    p {
+        align-self: end;
+    }
+    .dialogue-box {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        .error-dialogue {
+            color: red !important
+        }
+    }
+    textarea {
+        resize: none;
+        width: 100%;
+        height: 100px;
+    }
+}
 .make-post-container {
     height: 300px;
     width: 300px;
@@ -80,7 +119,7 @@ body {
 
 .comment-container, .post-container {
     padding: 10px 15px 30px 15px;
-    background-color: rgba(205, 234, 243, 0.4);
+    background-color: #e9d5ff;
     margin: 10px;
     border-radius: 3px;
     .comment-header {
@@ -103,7 +142,37 @@ body {
 .post-container {
     padding: 30px 15px 60px 30px;
     margin: 20px 15px;
+    .post-header {
+        display: flex;
+        justify-content: space-between;
+    }
 }
-.comment-container.my-forum-post {
-    background-color: rgb(212, 235, 255) !important;
+.my-forum-post {
+    background-color: #e9d5ff !important;
 } 
+
+.recent-post-container {
+    cursor: pointer;
+ .recent-post-inner {
+    margin: 3px;
+    transition-duration: 0.2s;
+    border: 1px solid rgba(0, 0, 0, 0.107);
+    height: 100px;
+    border-radius: 4px;
+    &:hover {
+        transition-duration: 0.2s;
+        transform: translateY(-2px);
+        background-color: rgb(236, 234, 255);
+    }
+ }
+}
+.whats-new-container {
+    border-left: 1px solid rgba(0, 0, 0, 0.214);
+    .commit-block {
+        margin: 0.25em;
+        p {
+            color: #00000091
+        }
+    }
+    
+}

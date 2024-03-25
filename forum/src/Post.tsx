@@ -16,7 +16,8 @@ function Post({ sessionID }: { sessionID: string }) {
   const [allComments, setAllComments] = useState<Comment[] | undefined>();
   const [comment, setComment] = useState<string>();
   const [currentPost, setCurrentPost] = useState<PostInfo[] | undefined>();
-
+  const [loading, setLoading] = useState(false)
+  const [error, setError] = useState<string | null>()
   // get all the comments for a post
   useEffect(() => {
     fetch(`http://localhost:3001/posts?id=${id}`, {
@@ -31,7 +32,7 @@ function Post({ sessionID }: { sessionID: string }) {
       });
   }, []);
 
-  // get the individual post's data
+  // get the individual post
   useEffect(() => {
     fetch(`http://localhost:3001/post?id=${id}`, {
       method: "GET",
@@ -67,19 +68,24 @@ function Post({ sessionID }: { sessionID: string }) {
     <div>
       <Header />
       {currentPost && (
-        <div className="post-container">
+        <div className={`post-container ${
+          currentPost[0].sessionID === sessionID ? "my-forum-post" : ""
+        } `}>
+          <div className="post-header">
           <p>
             Post Date:{" "}
             {new Date(Number(currentPost[0].date) * 1000).toUTCString()}
           </p>
-          <p> Post id {id}</p>
+          <p> Post id:  {currentPost[0].sessionID === sessionID && (
+                  <span className="material-symbols-outlined"  title="You">star_rate</span>
+                )} {id}</p>
+          </div>
           <h3>{currentPost && currentPost[0].title}</h3>
           <p>{currentPost && currentPost[0].comment}</p>
         </div>
       )}
 
-      <br />
-      <br />
+      <p className="m-3">{allComments && allComments?.length > 0 ? "replies:" : "No comments here yet!"} </p>
       {allComments &&
         allComments?.map((comment: Comment) => (
           <div
@@ -93,7 +99,7 @@ function Post({ sessionID }: { sessionID: string }) {
               </p>
               <p>
                 {comment.sessionID === sessionID && (
-                  <span className="material-symbols-outlined">star_rate</span>
+                  <span className="material-symbols-outlined"  title="You">star_rate</span>
                 )}
                 Post id: {comment.commentID}{" "}
               </p>
@@ -101,20 +107,28 @@ function Post({ sessionID }: { sessionID: string }) {
             <p className="comment-content">{comment.comment}</p>
           </div>
         ))}
-      {allComments?.length === 0 && <p>No comments here yet!</p>}
 
       <div className="make-comment-container">
-        <p>Posting as: {sessionID}</p>
+        <div className="dialogue-box">
+        <p className="error-dialogue">{error && <>{error}</>}</p>
+        <p className="posting-as-dialogue">Posting as: {sessionID}</p>
+        </div>
         <form
           onSubmit={(e) => {
             e.preventDefault();
+            if (!comment) {
+              setError('comments cannot be blank')
+              return setLoading(false)
+            }
+            setLoading(true)
             handleNewPost();
             window.location.reload();
           }}
         >
-          <label htmlFor="comment"></label>
-          <textarea id="comment" onChange={(e) => setComment(e.target.value)} />
-          <button type="submit">Submit Comment</button>
+          <textarea id="comment" placeholder="type your reply..." onChange={(e) => {
+            setError(null)
+            setComment(e.target.value)}} />
+          <button disabled={loading} type="submit">{loading ? "loading" : "Submit Comment"}</button>
         </form>
       </div>
     </div>
