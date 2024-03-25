@@ -116,7 +116,9 @@ button {
         }
     }
 }
-
+.all-comments-container {
+    margin-bottom: 200px
+}
 .comment-container, .post-container {
     padding: 10px 15px 30px 15px;
     background-color: #e9d5ff;
