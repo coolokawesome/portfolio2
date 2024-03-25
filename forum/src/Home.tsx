@@ -1,33 +1,33 @@
-import { useCallback, useEffect, useState } from 'react'
+import { useEffect, useState } from 'react'
 import Header from './Header'
 import { useNavigate } from 'react-router-dom'
 import {v4 as uuidv4} from 'uuid'
 
 
-export interface Post {
+export interface PostInfo {
   title?: string,
   comment?: string,
   date?: number,
   forumPostID?: string, 
-  sessionId?: string,
+  sessionID?: string,
   lastUpdated?: number,
   image?: File
 }
 
 
-function Home({sessionId}:{sessionId: string}) {
-    const [makePost, setMakePost] = useState(false)
-    const [postContent, setPostContent] = useState<Post>({
+function Home({sessionID}:{sessionID: string}) {
+    const [, setMakePost] = useState(false)
+    const [postContent, setPostContent] = useState<PostInfo>({
       title: "",
       comment: "",
       date: undefined,
       forumPostID: undefined,
-      sessionId: undefined,
+      sessionID: undefined,
       lastUpdated: undefined,
       image: undefined
     })
     const [error, setError] = useState<string | undefined>(undefined)
-    const [allPosts, setAllPosts] = useState<Post[] | undefined>(undefined)
+    const [allPosts, setAllPosts] = useState<PostInfo[] | undefined>(undefined)
     const navigate = useNavigate()
 
     useEffect(() => {
@@ -54,7 +54,7 @@ function Home({sessionId}:{sessionId: string}) {
           date: Math.floor(new Date().getTime() / 1000).toString(),
           lastUpdated: Math.floor(new Date().getTime() / 1000).toString(),
           forumPostID: uuidv4(),
-          sessionId: sessionId
+          sessionId: sessionID
 
         })
       })
@@ -65,7 +65,15 @@ function Home({sessionId}:{sessionId: string}) {
   return (
     <div>
         <Header />
-        <p>Welcome to the forum</p>
+        <div className='forum-hero-container'>
+          <div className='forum-hero-left'>
+          <h1>Welcome to TechTalk</h1>
+          <span className="material-symbols-outlined">forum</span>
+          </div>
+          <div className='forum-hero-right'>
+            <img src='https://www.shutterstock.com/image-vector/social-network-icon-people-illustration-600nw-390109174.jpg' />
+          </div>
+        </div>
         <button onClick={() => setMakePost((p) => !p)}>Create a post</button>
         <p>recent posts:</p>
         <div className='home-content-container'>

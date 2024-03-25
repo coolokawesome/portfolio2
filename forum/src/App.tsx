@@ -1,5 +1,4 @@
 import { useEffect, useState } from 'react'
-import Header from './Header'
 import './assets/App.css'
 import { BrowserRouter, Route, Routes } from 'react-router-dom'
 import Home from './Home'
@@ -9,16 +8,16 @@ import {v4 as uuidv4} from 'uuid'
 const uuid = uuidv4()
 
 function App() {
-  const [sessionId, setSessionId] = useState<string | undefined>()
+  const [sessionID, setSessionId] = useState<string | undefined>()
   
   // set a session id 
   useEffect(() => {
-    let getSessionId = localStorage.getItem('sessionId')
-    if (!getSessionId) {
-      getSessionId = uuid
-      localStorage.setItem('sessionId', getSessionId)
+    let getSessionID = localStorage.getItem('sessionId')
+    if (!getSessionID) {
+      getSessionID = uuid
+      localStorage.setItem('sessionId', getSessionID)
     }
-    setSessionId(getSessionId)
+    setSessionId(getSessionID)
   }, [])
 
 
@@ -26,9 +25,9 @@ function App() {
     <div>
       <BrowserRouter>
       <Routes>
-        <Route path="/" element={<Home sessionId={sessionId!} />} />
-        <Route path="/post/:id" element={<Post />}/>
-        <Route path="*" element={<Home sessionId={sessionId!} />} />
+        <Route path="/" element={<Home sessionID={sessionID!} />} />
+        <Route path="/post/:id" element={<Post sessionID={sessionID!} />}/>
+        <Route path="*" element={<Home sessionID={sessionID!} />} />
         <Route path="/suggestions" element={null} />
       </Routes>
       </BrowserRouter>
