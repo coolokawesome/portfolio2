@@ -99,29 +99,32 @@ function Post({ sessionID }: { sessionID: string }) {
           : "No comments here yet!"}{" "}
       </p>
       <div className="all-comments-container">
-      {allComments &&
-        allComments?.sort((a, b) => parseInt(a.lastUpdated) - parseInt(b.lastUpdated)).map((comment: Comment) => (
-          <div
-            className={`comment-container ${
-              comment.sessionID === sessionID ? "my-forum-post" : ""
-            }`}
-          >
-            <div className="comment-header">
-              <p>
-                Post date: {new Date(Number(comment.date) * 1000).toUTCString()}
-              </p>
-              <p>
-                {comment.sessionID === sessionID && (
-                  <span className="material-symbols-outlined" title="You">
-                    star_rate
-                  </span>
-                )}
-                Post id: {comment.commentID}{" "}
-              </p>
-            </div>
-            <p className="comment-content">{comment.comment}</p>
-          </div>
-        )).sort((a,b) => parseInt(a.lastUpdated) - parseInt(b.lastUpdated))}
+        {allComments &&
+          allComments
+            ?.sort((a, b) => parseInt(a.lastUpdated) - parseInt(b.lastUpdated))
+            .map((comment: Comment) => (
+              <div
+                className={`comment-container ${
+                  comment.sessionID === sessionID ? "my-forum-post" : ""
+                }`}
+              >
+                <div className="comment-header">
+                  <p>
+                    Post date:{" "}
+                    {new Date(Number(comment.date) * 1000).toUTCString()}
+                  </p>
+                  <p>
+                    {comment.sessionID === sessionID && (
+                      <span className="material-symbols-outlined" title="You">
+                        star_rate
+                      </span>
+                    )}
+                    Post id: {comment.commentID}{" "}
+                  </p>
+                </div>
+                <p className="comment-content">{comment.comment}</p>
+              </div>
+            ))}
       </div>
 
       <div className="make-comment-container">

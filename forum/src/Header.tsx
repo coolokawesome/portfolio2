@@ -7,7 +7,7 @@ function Header() {
   return (
     <header className="header-container">
         <div>
-        <h2>Tech Talk</h2>
+        <h2>TechTalk</h2>
         </div>
        <div className='forum-header-right'>
         <a onClick={ () => navigate("/")}>Home</a>

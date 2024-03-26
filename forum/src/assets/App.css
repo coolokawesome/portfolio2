@@ -84,7 +84,8 @@ button {
     justify-content: end;
     width: 100%;
     bottom: 0;
-    background-color: rgb(232, 226, 237);
+    background-color: rgb(230, 214, 253);
+    border: 1px solid rgb(245, 239, 255);
     p {
         align-self: end;
     }
@@ -121,9 +122,9 @@ button {
 }
 .comment-container, .post-container {
     padding: 10px 15px 30px 15px;
-    background-color: #e9d5ff;
+    background-color: #f9f5fe;
     margin: 10px;
-    border-radius: 3px;
+    border-radius: 10px;
     .comment-header {
         display: flex;
         justify-content: space-between;
@@ -150,7 +151,7 @@ button {
     }
 }
 .my-forum-post {
-    background-color: #e9d5ff !important;
+    background-color: #f5ebff !important;
 } 
 
 .recent-post-container {

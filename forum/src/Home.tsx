@@ -104,7 +104,8 @@ function Home({ sessionID }: { sessionID: string }) {
                     className="recent-post-container col-12 col-lg-6 col-xl-4"
                   >
                     <div className="recent-post-inner">
-                      <a>{post.title}</a>
+                      <h4>{post.title}</h4>
+                      <p>{post.comment}</p>
                     </div>
                   </div>
                 ))}
