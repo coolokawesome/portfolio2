@@ -242,7 +242,9 @@ button {
         background-color: rgba(211, 203, 237, 0.722) !important;
     }
 }
-
+.recent-post-container:last-child {
+    margin-bottom: 300px;
+}
 .whats-new-container {
     border-left: 1px solid rgba(0, 0, 0, 0.214);
 

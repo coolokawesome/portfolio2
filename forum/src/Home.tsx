@@ -152,10 +152,10 @@ function Home({ sessionID }: { sessionID: string }) {
                     <div className="commit-block mb-4">
                       <h5>
                         {new Date(
-                          newItem.commit.author.date || ""
+                          newItem?.commit?.author?.date || ""
                         ).toDateString()}
                       </h5>
-                      <p>{newItem.commit.message}</p>
+                      <p>{newItem?.commit?.message}</p>
                     </div>
                   ))
                   .slice(0, 10)}

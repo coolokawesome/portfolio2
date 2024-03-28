@@ -10,7 +10,7 @@ import https from 'https'
 // keep these a secret!
 const accessKeyId = "AKIAZXKYFLQSH2LUREF7"
 const secretAccessKey = "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"
-const token = "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"
+const token = "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"
 
 
 AWS.config.update({
@@ -113,7 +113,7 @@ app.get('/post', (req, res) => {
   });
 });
 // delete the one post
-app.delete('/post', (req,res) => {
+app.delete('/post', (req, res) => {
   const forumPostID = req.query.id;
   const params = {
     TableName: 'forumPosts',
@@ -123,42 +123,54 @@ app.delete('/post', (req,res) => {
       }
     },
   }
-  dynamo.deleteItem(params, (err,data) => {
+  dynamo.deleteItem(params, (err, data) => {
     if (err) {
       console.error(err)
       res.status(500).send(err.message)
-    }
-    else {
+    } else {
       res.send(data);
     }
   })
 })
+
 // do what reddit does to deleted comments
 app.delete('/posts', (req, res) => {
-  const pk = req.query.id;  
-  const sk = req.query.skId; 
+  const pk = req.query.id;
+  const sk = req.query.skId;
 
   const updateParams = {
     TableName: 'forumComments',
     Key: {
-      'commentID': { S: pk },
-      'forumPostID': { S: sk }
+      'commentID': {
+        S: pk
+      },
+      'forumPostID': {
+        S: sk
+      }
     },
-    UpdateExpression: 'SET #deleted = :val', 
-    ExpressionAttributeNames: { '#deleted': 'deleted' },  
+    UpdateExpression: 'SET #deleted = :val',
+    ExpressionAttributeNames: {
+      '#deleted': 'deleted'
+    },
     ExpressionAttributeValues: {
-      ':val': { BOOL: true }  
+      ':val': {
+        BOOL: true
+      }
     },
-    ReturnValues: 'ALL_NEW' 
+    ReturnValues: 'ALL_NEW'
   };
   dynamo.updateItem(updateParams, (err, data) => {
     if (err) {
       console.error("Unable to update item. Error:", JSON.stringify(err, null, 2));
     } else {
-      res.status(200).json({ message: "success", updatedItem: data.Attributes });
+      res.status(200).json({
+        message: "success",
+        updatedItem: data.Attributes
+      });
     }
   });
 });
+
 // get all comments for a post (utilizing Global Secondary Index table scan)
 app.get('/posts', (req, res) => {
   const forumPostID = req.query.id;
@@ -188,7 +200,9 @@ app.get('/posts', (req, res) => {
 // put a new forum comment in
 app.post('/posts', (req, res) => {
   const forumPostID = req.query.id;
-  const {body} = req;
+  const {
+    body
+  } = req;
 
   // parameters for the forum comments
   const itemParams = {
