@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import Header from "./Header";
-import { useNavigate } from "react-router-dom";
+import { redirect, useNavigate } from "react-router-dom";
 import { v4 as uuidv4 } from "uuid";
 import Footer from "./Footer";
 
@@ -32,7 +32,6 @@ function Home({ sessionID }: { sessionID: string }) {
     forumPostID: undefined,
     sessionID: undefined,
     lastUpdated: undefined,
-    image: undefined,
   });
   const [error, setError] = useState<string | undefined>();
   const [allPosts, setAllPosts] = useState<PostInfo[] | undefined>();
@@ -112,13 +111,18 @@ function Home({ sessionID }: { sessionID: string }) {
                 {allPosts &&
                   allPosts.map((post) => (
                     <div className="recent-post-container col-12">
-                      <div className={`recent-post-inner p-4 ${post.pinned && 'pinned'}`}>
+                      <div
+                        className={`recent-post-inner p-4 ${
+                          post.pinned && "pinned"
+                        }`}
+                      >
                         <div className="d-flex justify-content-between">
-                          <h2 className="post-header">{post.title} {post.pinned && <>{"📌"}</>}</h2>
+                          <h2 className="post-header">
+                            {post.title} {post.pinned && <>{"📌"}</>}
+                          </h2>
                           <p>
                             {post.date &&
                               new Date(post.date * 1000).toDateString()}
-
                           </p>
                         </div>
                         <p className="post-comment">{post.comment}</p>
@@ -174,7 +178,7 @@ function Home({ sessionID }: { sessionID: string }) {
                   return setError("Please enter a comment.");
                 }
                 setPost();
-                window.location.reload();
+                window.location.reload()
               }}
             >
               {error && <p className="error-text">{error}</p>}

@@ -1,4 +1,4 @@
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import Header from "./Header";
 import { useEffect, useState } from "react";
 import { v4 as uuidv4 } from "uuid";
@@ -12,6 +12,7 @@ export interface Comment {
   commentID: string;
   sessionID: string;
   comment: string;
+  deleted: boolean;
 }
 function Post({ sessionID }: { sessionID: string }) {
   const { id } = useParams();
@@ -20,6 +21,8 @@ function Post({ sessionID }: { sessionID: string }) {
   const [currentPost, setCurrentPost] = useState<PostInfo[] | undefined>();
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>();
+  const navigate = useNavigate();
+
   // get all the comments for a post
   useEffect(() => {
     fetch(`http://localhost:3001/posts?id=${id}`, {
@@ -66,6 +69,37 @@ function Post({ sessionID }: { sessionID: string }) {
       }),
     }).then((res) => console.log(res));
   };
+
+  const deletePost = (pk: string) => {
+    fetch(`http://localhost:3001/post?id=${pk}`, {
+      method: "DELETE",
+      headers: {
+        "Content-Type": "application/json",
+      },
+    }).then((res) => {
+      if (res.status === 200) {
+        navigate("/");
+      } else {
+        console.warn("error deleting post: ", res);
+      }
+    });
+  };
+
+  const deleteComment = (pk: string, sk: string) => {
+    fetch(`http://localhost:3001/posts?id=${pk}&skId=${sk}`, {
+      method: "DELETE",
+      headers: {
+        "Content-Type": "application/json",
+      },
+    }).then((res) => {
+      if (res.status === 200) {
+        window.location.reload();
+      } else {
+        console.warn("error deleting post: ", res);
+      }
+    });
+  };
+
   return (
     <div>
       <Header />
@@ -74,7 +108,7 @@ function Post({ sessionID }: { sessionID: string }) {
           <div
             className={`post-container ${
               currentPost[0].sessionID === sessionID ? "my-forum-post" : ""
-            } `}
+            }`}
           >
             <div className="post-header">
               <p>
@@ -88,6 +122,13 @@ function Post({ sessionID }: { sessionID: string }) {
                   </span>
                 )}{" "}
                 Post id: {id}
+                {currentPost[0].sessionID === sessionID && (
+                  <button
+                    className="fa fa-solid fa-trash trash"
+                    id={currentPost[0]?.forumPostID}
+                    onClick={(e) => deletePost((e.target as HTMLElement).id)}
+                  ></button>
+                )}
               </p>
             </div>
             <h3>{currentPost && currentPost[0].title}</h3>
@@ -129,9 +170,28 @@ function Post({ sessionID }: { sessionID: string }) {
                             </span>
                           )}
                           Post id: {comment.commentID}
+                          {comment.sessionID === sessionID &&
+                            !comment.deleted && (
+                              <button
+                                className="fa fa-solid fa-trash trash"
+                                onClick={() =>
+                                  deleteComment(
+                                    comment.commentID,
+                                    comment.forumPostID
+                                  )
+                                }
+                              ></button>
+                            )}
                         </p>
                       </div>
-                      <p className="comment-content">{comment.comment}</p>
+                      <p className="comment-content">
+                        {!comment.deleted && comment.comment}
+                      </p>
+                      {comment.deleted && (
+                        <p className="comment-content deleted">
+                          <i>This comment was deleted.</i>
+                        </p>
+                      )}
                     </div>
                   ))}
             </div>

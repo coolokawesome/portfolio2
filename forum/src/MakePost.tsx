@@ -1,4 +1,4 @@
-import React, { useCallback, useState } from "react";
+import React, { useState } from "react";
 import { PostInfo } from "./Home";
 import { v4 as uuidv4 } from "uuid";
 
@@ -10,9 +10,8 @@ function MakePost({ sessionID }: { sessionID: string }) {
     date: undefined,
     forumPostID: undefined,
     sessionID: undefined,
-    lastUpdated: undefined,
-    image: undefined,
-  });
+    lastUpdated: undefined
+    });
   const setPost = () => {
     const body = JSON.stringify({
       ...postContent,
@@ -70,10 +69,6 @@ function MakePost({ sessionID }: { sessionID: string }) {
             }
             id="comment"
           ></textarea>
-        </div>
-        <div>
-          <label htmlFor="selection">Image</label>
-          <input accept=".png" type="file" />
         </div>
         <button>submit</button>
       </form>

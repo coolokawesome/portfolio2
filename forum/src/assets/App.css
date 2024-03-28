@@ -1,6 +1,7 @@
 body {
     margin: 0;
 }
+
 .header-container {
     display: flex;
     flex-direction: row;
@@ -13,9 +14,11 @@ body {
     top: 0;
     padding: 10px;
     z-index: 10000;
+
     h2 {
-        color: white 
+        color: white
     }
+
     .forum-header-right {
         a {
             cursor: pointer;
@@ -23,6 +26,7 @@ body {
             margin: 0px 9px;
             text-decoration: underline;
             transition-duration: 0.2s;
+
             &:hover {
                 transition-duration: 0.2s;
                 color: rgb(254, 228, 254)
@@ -31,6 +35,7 @@ body {
     }
 
 }
+
 .forum-hero-container {
     height: 200px;
     display: flex;
@@ -38,18 +43,21 @@ body {
     align-items: center;
     padding: 30px;
     background-color: rgb(250, 240, 255);
+
     .forum-hero-left {
         display: flex;
         align-items: center;
+
         .material-symbols-outlined {
             padding: 10px;
             font-size: 2.5em;
         }
     }
+
     .forum-hero-right {
 
         img {
-            object-fit:contain;
+            object-fit: contain;
             height: 300px;
             width: auto;
             mix-blend-mode: multiply !important;
@@ -57,12 +65,15 @@ body {
         }
     }
 }
+
 .home-content-container {
     position: relative;
 }
+
 .error-text {
     color: red
 }
+
 button {
     border: 1px solid rgba(0, 0, 0, 0.469);
     border-radius: 3px;
@@ -71,12 +82,14 @@ button {
     width: 100%;
     transition-duration: 0.2s;
     margin-bottom: 3px;
+
     &:hover {
         background-color: rgb(32, 15, 40);
         color: white;
         transition-duration: 0.2s;
     }
 }
+
 .make-comment-container {
     position: fixed;
     right: 0;
@@ -90,23 +103,28 @@ button {
     border: 1px solid rgba(1, 1, 1, 0.305);
     border-radius: 8px;
     padding: 10px;
+
     p {
         align-self: end;
     }
+
     .dialogue-box {
         display: flex;
         justify-content: space-between;
         align-items: center;
+
         .error-dialogue {
             color: red !important
         }
     }
+
     textarea {
         resize: none;
         width: 100%;
         height: 100px;
     }
 }
+
 .make-post-container {
     position: fixed;
     right: 0;
@@ -120,131 +138,172 @@ button {
     padding: 10px;
     background-color: #f1dcfbef;
     min-width: 600px;
+
     form {
         .post-row {
             display: flex;
             justify-content: space-between;
         }
-        input, textarea {
+
+        input,
+        textarea {
             width: 100%;
             margin-bottom: 4px;
         }
+
         textarea {
             height: 200px;
             resize: none;
         }
     }
 }
+
 .all-comments-container {
     margin-bottom: 200px
 }
-.comment-container, .post-container {
+
+.comment-container,
+.post-container {
     padding: 10px 15px 30px 15px;
     background-color: #f1dcfb9d;
     border: 1px solid rgba(0, 0, 0, 0.334);
     margin: 10px;
     border-radius: 10px;
+
     .comment-header {
         display: flex;
         justify-content: space-between;
         border-bottom: 1px solid rgba(136, 136, 136, 0.398);
     }
+
     p {
         margin: 0;
         display: flex;
         align-items: center;
     }
+
     .comment-content {
         margin: 10px
     }
+
     .material-symbols-outlined {
         color: gold;
     }
 }
+
 .post-container {
     padding: 30px 15px 60px 30px;
     margin: 20px 15px;
+
     .post-header {
         display: flex;
         justify-content: space-between;
     }
 }
+
 .my-forum-post {
     background-color: #f5ebff !important;
-} 
+}
+
 .parent {
     min-height: 100vh;
 }
 
 .recent-post-container {
- .recent-post-inner {
-    background-color: #f1dcfb9d;
-    margin: 3px;
-    transition-duration: 0.2s;
-    border: 1px solid rgba(0, 0, 0, 0.368);
-    height: 180px;
-    border-radius: 4px;
-    .post-header {
-        white-space: nowrap;
-        text-overflow: ellipsis;
-        overflow: hidden;
-        height: 50px !important
-    }
-    .post-comment {
-        white-space: nowrap;
-        text-overflow: ellipsis;
-        overflow: hidden;
-        height: 30px !important
-    }
-    &:hover {
+    .recent-post-inner {
+        background-color: #f1dcfb9d;
+        margin: 3px;
         transition-duration: 0.2s;
-        background-color: rgb(246, 227, 255);
+        border: 1px solid rgba(0, 0, 0, 0.368);
+        height: 180px;
+        border-radius: 4px;
+
+        .post-header {
+            white-space: nowrap;
+            text-overflow: ellipsis;
+            overflow: hidden;
+            height: 50px !important
+        }
+
+        .post-comment {
+            white-space: nowrap;
+            text-overflow: ellipsis;
+            overflow: hidden;
+            height: 30px !important
+        }
+
+        &:hover {
+            transition-duration: 0.2s;
+            background-color: rgb(246, 227, 255);
+        }
     }
- }
- .recent-post-inner.pinned {
-    background-color: rgba(211, 203, 237, 0.722) !important;
- }
+
+    .recent-post-inner.pinned {
+        background-color: rgba(211, 203, 237, 0.722) !important;
+    }
 }
+
 .whats-new-container {
     border-left: 1px solid rgba(0, 0, 0, 0.214);
+
     .commit-block {
         margin: 0.25em;
+
         p {
             color: #00000091
         }
     }
-    
+
 }
+
 .arrow {
     cursor: pointer;
+
     &:hover {
         i {
             animation: animateArrow 6s ease forwards;
         }
     }
 }
+
 @keyframes animateArrow {
     0% {
         transform: translateX(0px);
     }
+
     5% {
         transform: translateX(3px);
     }
+
     10% {
         transform: translateX(0px);
     }
+
     15% {
         transform: translateX(3px);
     }
-    20%, 100% {
+
+    20%,
+    100% {
         transform: translateX(0px);
     }
 
 }
+
 .footer-container {
     height: 40px;
     background: linear-gradient(0deg, #131015, rgb(31, 13, 54));
+
     a {
         color: white;
     }
+}
+.trash {
+    width: 30px;
+    margin: 0px 10px;
+    border: none
+}
+
+.deleted {
+    color: red
 }
