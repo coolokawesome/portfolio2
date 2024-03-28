@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import Header from "./Header";
-import { redirect, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { v4 as uuidv4 } from "uuid";
 import Footer from "./Footer";
 
@@ -158,7 +158,7 @@ function Home({ sessionID }: { sessionID: string }) {
                       <p>{newItem.commit.message}</p>
                     </div>
                   ))
-                  .slice(0, 5)}
+                  .slice(0, 10)}
             </div>
           </div>
         </div>

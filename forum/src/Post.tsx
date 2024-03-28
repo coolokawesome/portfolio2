@@ -95,7 +95,7 @@ function Post({ sessionID }: { sessionID: string }) {
       if (res.status === 200) {
         window.location.reload();
       } else {
-        console.warn("error deleting post: ", res);
+        console.warn("error deleting comment: ", res);
       }
     });
   };

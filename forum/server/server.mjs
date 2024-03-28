@@ -90,7 +90,29 @@ app.post('/', (req, res) => {
     }
   });
 });
-
+// get just the one post
+app.get('/post', (req, res) => {
+  const forumPostID = req.query.id;
+  const commentParams = {
+    TableName: 'forumPosts',
+    KeyConditionExpression: 'forumPostID = :id',
+    ExpressionAttributeValues: {
+      ':id': {
+        S: forumPostID
+      }
+    }
+  };
+  dynamo.query(commentParams, (err, data) => {
+    if (err) {
+      console.error(err);
+      res.status(500).send(err.message);
+    } else {
+      const unmarshalledItems = data.Items.map(item => AWS.DynamoDB.Converter.unmarshall(item));
+      res.send(unmarshalledItems);
+    }
+  });
+});
+// delete the one post
 app.delete('/post', (req,res) => {
   const forumPostID = req.query.id;
   const params = {
@@ -111,7 +133,6 @@ app.delete('/post', (req,res) => {
     }
   })
 })
-
 // do what reddit does to deleted comments
 app.delete('/posts', (req, res) => {
   const pk = req.query.id;  
@@ -130,17 +151,14 @@ app.delete('/posts', (req, res) => {
     },
     ReturnValues: 'ALL_NEW' 
   };
-
   dynamo.updateItem(updateParams, (err, data) => {
     if (err) {
       console.error("Unable to update item. Error:", JSON.stringify(err, null, 2));
-      res.status(500).json({ error: "Unable to update post." });
     } else {
-      res.status(200).json({ message: "Post marked as deleted successfully.", updatedItem: data.Attributes });
+      res.status(200).json({ message: "success", updatedItem: data.Attributes });
     }
   });
 });
-
 // get all comments for a post (utilizing Global Secondary Index table scan)
 app.get('/posts', (req, res) => {
   const forumPostID = req.query.id;
@@ -160,12 +178,13 @@ app.get('/posts', (req, res) => {
       console.error(err);
       res.status(500).send(err.message);
     } else {
-      const unmarshalledItems = data.Items.map(item => AWS.DynamoDB.Converter.unmarshall(item));
+      const unmarshalledItems = data.Items?.sort(
+        (a, b) => parseInt(a.lastUpdated) - parseInt(b.lastUpdated)
+      ).map(item => AWS.DynamoDB.Converter.unmarshall(item));
       res.send(unmarshalledItems);
     }
   });
 });
-
 // put a new forum comment in
 app.post('/posts', (req, res) => {
   const forumPostID = req.query.id;
@@ -223,29 +242,6 @@ app.post('/posts', (req, res) => {
   });
 });
 
-
-// get just the one post
-app.get('/post', (req, res) => {
-  const forumPostID = req.query.id;
-  const commentParams = {
-    TableName: 'forumPosts',
-    KeyConditionExpression: 'forumPostID = :id',
-    ExpressionAttributeValues: {
-      ':id': {
-        S: forumPostID
-      }
-    }
-  };
-  dynamo.query(commentParams, (err, data) => {
-    if (err) {
-      console.error(err);
-      res.status(500).send(err.message);
-    } else {
-      const unmarshalledItems = data.Items.map(item => AWS.DynamoDB.Converter.unmarshall(item));
-      res.send(unmarshalledItems);
-    }
-  });
-});
 // get a list of activity to this repository using GitHub's API (Dont share my token plz)
 app.get('/commits', (req, res) => {
   const options = {
@@ -256,7 +252,6 @@ app.get('/commits', (req, res) => {
       'User-Agent': 'Node.js'
     }
   };
-
   https.get(options, (response) => {
     let data = '';
     response.on('data', (chunk) => {
