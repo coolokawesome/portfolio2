@@ -3,6 +3,8 @@ import AWS from 'aws-sdk'
 import { marshall, unmarshall } from "@aws-sdk/util-dynamodb"
 import https from 'https'
 
+
+// keep these a secret!
 const accessKeyId = "AKIAZXKYFLQSH2LUREF7"
 const secretAccessKey = "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"
 const token = "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"
@@ -13,9 +15,9 @@ AWS.config.update({
   accessKeyId: accessKeyId,
   secretAccessKey: secretAccessKey,
 });
-//data & images
-const dynamo = new AWS.DynamoDB({apiVersion: "2012-08-10"});
 
+// data 
+const dynamo = new AWS.DynamoDB({apiVersion: "2012-08-10"});
 
 const app = express();
 app.use(express.json());
@@ -37,7 +39,19 @@ app.use((req, res, next) => {
         res.status(500).send(err.message);
       } else {
         const { Items } = data;
-        const unmarshalledItems = Items.map(item => unmarshall(item));
+        const unmarshalledItems = Items.map(item => unmarshall(item)).sort(
+          (a, b) => {
+            if (a.pinned && !b.pinned) {
+              return -1
+            } else if (!a.pinned && b.pinned) {
+              return 1
+            } else {
+              const aLastUpdated = a.lastUpdated ? parseInt(a.lastUpdated) : 0;
+              const bLastUpdated = b.lastUpdated ? parseInt(b.lastUpdated) : 0;
+              return bLastUpdated - aLastUpdated;
+            }
+          }
+        );
         res.send(unmarshalledItems);
       }
     });
@@ -60,8 +74,8 @@ app.use((req, res, next) => {
     
       dynamo.putItem(params, (err, data) => {
         if (err) {
-          console.error('Unable to add item. Error:', err);
-            res.status(500).send('Unable to add item. Error: ' + err.message);
+          console.error('Unable to add item: ', err);
+            res.status(500).send('Unable to add item:  ' + err.message);
         } else {
           res.status(200).send('Added item: ' + JSON.stringify(data));
         }
@@ -126,16 +140,16 @@ app.get('/posts', (req, res) => {
     
     dynamo.putItem(addParams, (err, data) => {
       if (err) {
-        console.error('Unable to add item. Error:', err);
-        res.status(500).send('Unable to add item. Error: ' + err.message);
+        console.error('Unable to add item: ', err);
+        res.status(500).send('Unable to add item: ' + err.message);
       } else {
         console.log('updateParams: ', updateParams)
         // If the add item operation succeeded, then update the forum post
         dynamo.updateItem(updateParams, (updateErr, updateData) => {
           if (updateErr) {
-            console.error('Could not update the forum post last updated value', updateErr);
+            console.error(updateErr);
           } else {
-            console.log('Successfully updated forum last update status', updateData);
+            console.log(updateData);
           }
         });
         
@@ -165,7 +179,7 @@ app.get('/posts', (req, res) => {
       }
     });
   });
-// get a list of activity to this repository using GitHub's API
+// get a list of activity to this repository using GitHub's API (Dont share my token plz)
 app.get('/commits', (req, res) => {
   const options = {
       hostname: 'api.github.com',
@@ -178,11 +192,9 @@ app.get('/commits', (req, res) => {
 
   https.get(options, (response) => {
       let data = '';
-
       response.on('data', (chunk) => {
           data += chunk;
       });
-
       response.on('end', () => {
           if (response.statusCode === 200) {
               res.json(JSON.parse(data));

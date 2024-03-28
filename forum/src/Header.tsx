@@ -11,7 +11,7 @@ function Header() {
         </div>
        <div className='forum-header-right'>
         <a onClick={ () => navigate("/")}>Home</a>
-        <a target="#" href="https://github.com">Repo</a>
+        <a target="#" href="https://github.com/coolokawesome">Repo</a>
        </div>
     </header>
   )

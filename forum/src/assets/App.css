@@ -79,13 +79,17 @@ button {
 }
 .make-comment-container {
     position: fixed;
+    right: 0;
     display: flex;
     flex-direction: column;
     justify-content: end;
-    width: 100%;
-    bottom: 0;
-    background-color: rgb(230, 214, 253);
-    border: 1px solid rgb(245, 239, 255);
+    bottom: 50px;
+    height: 200px;
+    min-width: 600px;
+    background-color: #f1dcfbef;
+    border: 1px solid rgba(1, 1, 1, 0.305);
+    border-radius: 8px;
+    padding: 10px;
     p {
         align-self: end;
     }
@@ -104,16 +108,30 @@ button {
     }
 }
 .make-post-container {
-    height: 300px;
-    width: 300px;
-    background-color: rgb(202, 234, 243);
+    position: fixed;
+    right: 0;
+    display: flex;
+    flex-direction: column;
+    justify-content: end;
+    bottom: 50px;
+    background-color: #f1dcfbef;
+    border: 1px solid rgba(1, 1, 1, 0.305);
+    border-radius: 8px;
+    padding: 10px;
+    background-color: #f1dcfbef;
+    min-width: 600px;
     form {
         .post-row {
             display: flex;
             justify-content: space-between;
         }
         input, textarea {
-            width: 70%
+            width: 100%;
+            margin-bottom: 4px;
+        }
+        textarea {
+            height: 200px;
+            resize: none;
         }
     }
 }
@@ -122,7 +140,8 @@ button {
 }
 .comment-container, .post-container {
     padding: 10px 15px 30px 15px;
-    background-color: #f9f5fe;
+    background-color: #f1dcfb9d;
+    border: 1px solid rgba(0, 0, 0, 0.334);
     margin: 10px;
     border-radius: 10px;
     .comment-header {
@@ -153,20 +172,37 @@ button {
 .my-forum-post {
     background-color: #f5ebff !important;
 } 
+.parent {
+    min-height: 100vh;
+}
 
 .recent-post-container {
-    cursor: pointer;
  .recent-post-inner {
+    background-color: #f1dcfb9d;
     margin: 3px;
     transition-duration: 0.2s;
-    border: 1px solid rgba(0, 0, 0, 0.107);
-    height: 100px;
+    border: 1px solid rgba(0, 0, 0, 0.368);
+    height: 180px;
     border-radius: 4px;
+    .post-header {
+        white-space: nowrap;
+        text-overflow: ellipsis;
+        overflow: hidden;
+        height: 50px !important
+    }
+    .post-comment {
+        white-space: nowrap;
+        text-overflow: ellipsis;
+        overflow: hidden;
+        height: 30px !important
+    }
     &:hover {
         transition-duration: 0.2s;
-        transform: translateY(-2px);
-        background-color: rgb(236, 234, 255);
+        background-color: rgb(246, 227, 255);
     }
+ }
+ .recent-post-inner.pinned {
+    background-color: rgba(211, 203, 237, 0.722) !important;
  }
 }
 .whats-new-container {
@@ -178,4 +214,37 @@ button {
         }
     }
     
+}
+.arrow {
+    cursor: pointer;
+    &:hover {
+        i {
+            animation: animateArrow 6s ease forwards;
+        }
+    }
+}
+@keyframes animateArrow {
+    0% {
+        transform: translateX(0px);
+    }
+    5% {
+        transform: translateX(3px);
+    }
+    10% {
+        transform: translateX(0px);
+    }
+    15% {
+        transform: translateX(3px);
+    }
+    20%, 100% {
+        transform: translateX(0px);
+    }
+
+}
+.footer-container {
+    height: 40px;
+    background: linear-gradient(0deg, #131015, rgb(31, 13, 54));
+    a {
+        color: white;
+    }
 }

@@ -3,6 +3,7 @@ import Header from "./Header";
 import { useEffect, useState } from "react";
 import { v4 as uuidv4 } from "uuid";
 import { PostInfo } from "./Home";
+import Footer from "./Footer";
 
 export interface Comment {
   date: string;
@@ -68,95 +69,106 @@ function Post({ sessionID }: { sessionID: string }) {
   return (
     <div>
       <Header />
-      {currentPost && (
-        <div
-          className={`post-container ${
-            currentPost[0].sessionID === sessionID ? "my-forum-post" : ""
-          } `}
-        >
-          <div className="post-header">
-            <p>
-              Post Date:{" "}
-              {new Date(Number(currentPost[0].date) * 1000).toUTCString()}
-            </p>
-            <p>
-              {currentPost[0].sessionID === sessionID && (
-                <span className="material-symbols-outlined" title="You">
-                  star_rate
-                </span>
-              )}{" "}
-              Post id: {id}
-            </p>
+      <div className="parent">
+        {currentPost && (
+          <div
+            className={`post-container ${
+              currentPost[0].sessionID === sessionID ? "my-forum-post" : ""
+            } `}
+          >
+            <div className="post-header">
+              <p>
+                Post Date:{" "}
+                {new Date(Number(currentPost[0].date) * 1000).toUTCString()}
+              </p>
+              <p>
+                {currentPost[0].sessionID === sessionID && (
+                  <span className="material-symbols-outlined" title="You">
+                    star_rate
+                  </span>
+                )}{" "}
+                Post id: {id}
+              </p>
+            </div>
+            <h3>{currentPost && currentPost[0].title}</h3>
+            <p>{currentPost && currentPost[0].comment}</p>
           </div>
-          <h3>{currentPost && currentPost[0].title}</h3>
-          <p>{currentPost && currentPost[0].comment}</p>
-        </div>
-      )}
+        )}
 
-      <p className="m-3">
-        {allComments && allComments?.length > 0
-          ? "replies:"
-          : "No comments here yet!"}{" "}
-      </p>
-      <div className="all-comments-container">
-        {allComments &&
-          allComments
-            ?.sort((a, b) => parseInt(a.lastUpdated) - parseInt(b.lastUpdated))
-            .map((comment: Comment) => (
-              <div
-                className={`comment-container ${
-                  comment.sessionID === sessionID ? "my-forum-post" : ""
-                }`}
-              >
-                <div className="comment-header">
-                  <p>
-                    Post date:{" "}
-                    {new Date(Number(comment.date) * 1000).toUTCString()}
-                  </p>
-                  <p>
-                    {comment.sessionID === sessionID && (
-                      <span className="material-symbols-outlined" title="You">
-                        star_rate
-                      </span>
-                    )}
-                    Post id: {comment.commentID}{" "}
-                  </p>
-                </div>
-                <p className="comment-content">{comment.comment}</p>
+        <p className="m-3">
+          {allComments && allComments?.length > 0
+            ? "replies:"
+            : "No comments here yet!"}{" "}
+        </p>
+        <div className="container-fluid">
+          <div className="row">
+            <div className="all-comments-container col-12 col-lg-10 col-xl-8">
+              {allComments &&
+                allComments
+                  ?.sort(
+                    (a, b) => parseInt(a.lastUpdated) - parseInt(b.lastUpdated)
+                  )
+                  .map((comment: Comment) => (
+                    <div
+                      className={`comment-container ${
+                        comment.sessionID === sessionID ? "my-forum-post" : ""
+                      }`}
+                    >
+                      <div className="comment-header">
+                        <p>
+                          Post date:{" "}
+                          {new Date(Number(comment.date) * 1000).toUTCString()}
+                        </p>
+                        <p>
+                          {comment.sessionID === sessionID && (
+                            <span
+                              className="material-symbols-outlined"
+                              title="You"
+                            >
+                              star_rate
+                            </span>
+                          )}
+                          Post id: {comment.commentID}
+                        </p>
+                      </div>
+                      <p className="comment-content">{comment.comment}</p>
+                    </div>
+                  ))}
+            </div>
+            <div className="make-comment-container col-12 col-lg-4">
+              <div className="dialogue-box">
+                <p className="error-dialogue">{error && <>{error}</>}</p>
+                <p className="posting-as-dialogue">Posting as: {sessionID}</p>
               </div>
-            ))}
-      </div>
-
-      <div className="make-comment-container">
-        <div className="dialogue-box">
-          <p className="error-dialogue">{error && <>{error}</>}</p>
-          <p className="posting-as-dialogue">Posting as: {sessionID}</p>
+              <form
+                onSubmit={(e) => {
+                  e.preventDefault();
+                  if (!comment) {
+                    setError("comments cannot be blank");
+                    return setLoading(false);
+                  }
+                  setLoading(true);
+                  handleNewPost();
+                  window.location.reload();
+                }}
+              >
+                <textarea
+                  id="comment"
+                  placeholder="type your reply..."
+                  onChange={(e) => {
+                    setError(null);
+                    setComment(e.target.value);
+                  }}
+                />
+                <button disabled={loading} type="submit">
+                  {loading ? "loading" : "Submit Comment"}
+                </button>
+              </form>
+            </div>
+          </div>
         </div>
-        <form
-          onSubmit={(e) => {
-            e.preventDefault();
-            if (!comment) {
-              setError("comments cannot be blank");
-              return setLoading(false);
-            }
-            setLoading(true);
-            handleNewPost();
-            window.location.reload();
-          }}
-        >
-          <textarea
-            id="comment"
-            placeholder="type your reply..."
-            onChange={(e) => {
-              setError(null);
-              setComment(e.target.value);
-            }}
-          />
-          <button disabled={loading} type="submit">
-            {loading ? "loading" : "Submit Comment"}
-          </button>
-        </form>
       </div>
+      <Footer />
     </div>
   );
 }
