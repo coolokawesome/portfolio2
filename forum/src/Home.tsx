@@ -15,6 +15,7 @@ export interface PostInfo {
 }
 // obviously there's much more to GitHub's JSON response
 interface WhatsNew {
+  error?: string | undefined;
   commit: {
     message: string;
     author: {
@@ -79,7 +80,9 @@ function Home({ sessionID }: { sessionID: string }) {
     })
       .then((res) => res.json())
       .then((res) => {
-        console.log("Github Response: ", res);
+        if (res.error) {
+          return
+        }
         return setWhatsNew(res);
       });
   }, []);
@@ -146,8 +149,7 @@ function Home({ sessionID }: { sessionID: string }) {
             </div>
             <div className="col-12 col-md-3 col-lg-4 whats-new-container">
               <h2 className="pb-4">What's new</h2>
-              {whatsNew &&
-                whatsNew
+              {whatsNew  && whatsNew
                   ?.map((newItem: WhatsNew) => (
                     <div className="commit-block mb-4">
                       <h5>
@@ -155,7 +157,7 @@ function Home({ sessionID }: { sessionID: string }) {
                           newItem?.commit?.author?.date || ""
                         ).toDateString()}
                       </h5>
-                      <p>{newItem?.commit?.message}</p>
+                      <p>{newItem?.commit?.message || ''}</p>
                     </div>
                   ))
                   .slice(0, 10)}

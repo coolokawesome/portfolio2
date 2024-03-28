@@ -10,7 +10,7 @@ import https from 'https'
 // keep these a secret!
 const accessKeyId = "AKIAZXKYFLQSH2LUREF7"
 const secretAccessKey = "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"
-const token = "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"
+const token = ""
 
 
 AWS.config.update({
